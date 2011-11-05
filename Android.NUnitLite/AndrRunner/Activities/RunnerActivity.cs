@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 
 using Android.App;
 using Android.Content;
@@ -57,7 +58,19 @@ namespace Android.NUnitLite.UI {
 				Adapter = new DialogAdapter (this, menu)
 			};
 			SetContentView (lv);
-        }
+
+			// AutoStart running the tests (with either the supplied 'writer' or the options)
+			if (Runner.AutoStart) {
+				ThreadPool.QueueUserWorkItem (delegate {
+					RunOnUiThread (delegate {
+						Run ();	
+						// optionally end the process, e.g. click "Andr.Unit" -> log tests results, return to springboard...
+						if (Runner.TerminateAfterExecution)
+							Finish ();
+					});
+				});
+			}
+		}
 		
 		public void Add (Assembly assembly)
 		{
@@ -86,17 +99,16 @@ namespace Android.NUnitLite.UI {
 
 		void Run ()
 		{
-			AndroidRunner runner = AndroidRunner.Runner;
-			if (!runner.OpenWriter ("Run Everything"))
+			if (!Runner.OpenWriter ("Run Everything"))
 				return;
 			
 			try {
 				foreach (TestSuite suite in AndroidRunner.AssemblyLevel) {
-					suite.Run (runner);
+					suite.Run (Runner);
 				}
 			}
 			finally {
-				runner.CloseWriter ();
+				Runner.CloseWriter ();
 			}
 			
 			foreach (TestElement te in main) {

@@ -17,9 +17,8 @@ namespace Android.NUnitLite {
 		{
 		}
 		
-		// TODO
 		public bool AutoStart { get; set; }
-		// TODO
+
 		public bool TerminateAfterExecution { get; set; }
 		
 		public Options Options { 
