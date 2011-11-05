@@ -27,7 +27,7 @@ namespace Andr.Unit
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			public const int icon = 2130837504;
 			
 			private Drawable()
 			{
@@ -127,7 +127,7 @@ namespace Andr.Unit
 			public const int dialog_textfieldright = 2130903056;
 			
 			// aapt resource value: 0x7f030011
-			public const int Main = 2130903057;
+			public const int main = 2130903057;
 			
 			private Layout()
 			{
