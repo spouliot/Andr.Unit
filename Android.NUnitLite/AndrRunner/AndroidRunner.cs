@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
+
+using Android.App;
 
 using NUnitLite;
 
 namespace Android.NUnitLite {
 	
 	public class AndroidRunner : TestListener {
+		
+		Options options;
 		
 		private AndroidRunner ()
 		{
@@ -17,22 +22,31 @@ namespace Android.NUnitLite {
 		// TODO
 		public bool TerminateAfterExecution { get; set; }
 		
+		public Options Options { 
+			get {
+				if (options == null)
+					options = new Options ();
+				return options;
+			}
+			set { options = value; }
+		}
+		
 		#region writer
 		
 		public TextWriter Writer { get; set; }
 		
 		public bool OpenWriter (string message)
 		{
-#if false
 			DateTime now = DateTime.Now;
 			// let the application provide it's own TextWriter to ease automation with AutoStart property
 			if (Writer == null) {
-				if (options.ShowUseNetworkLogger) {
-					Console.WriteLine ("[{0}] Sending '{1}' results to {2}:{3}", now, message, options.HostName, options.HostPort);
+				if (Options.ShowUseNetworkLogger) {
+					Console.WriteLine ("[{0}] Sending '{1}' results to {2}:{3}", now, message, Options.HostName, Options.HostPort);
 					try {
-						Writer = new TcpTextWriter (options.HostName, options.HostPort);
+						Writer = new TcpTextWriter (Options.HostName, Options.HostPort);
 					}
 					catch (SocketException) {
+						/*
 						UIAlertView alert = new UIAlertView ("Network Error", 
 							String.Format ("Cannot connect to {0}:{1}. Continue on console ?", options.HostName, options.HostPort), 
 							null, "Cancel", "Continue");
@@ -43,24 +57,22 @@ namespace Android.NUnitLite {
 						alert.Show ();
 						while (button == -1)
 							NSRunLoop.Current.RunUntil (NSDate.FromTimeIntervalSinceNow (0.5));
+
 						Console.WriteLine (button);
 						Console.WriteLine ("[Host unreachable: {0}]", button == 0 ? "Execution cancelled" : "Switching to console output");
 						if (button == 0)
 							return false;
-						else
+						else*/
 							Writer = Console.Out;
 					}
 				} else {
 					Writer = Console.Out;
 				}
 			}
-#else
-			Writer = Console.Out;
-#endif
 			
 			Writer.WriteLine ("[Runner executing:\t{0}]", message);
 #if false
-			Writer.WriteLine ("[MonoTouch Version:\t{0}]", MonoTouch.Constants.Version);
+			Writer.WriteLine ("[Mono for Android Version:\t{0}]", MonoTouch.Constants.Version);
 			UIDevice device = UIDevice.CurrentDevice;
 			Writer.WriteLine ("[{0}:\t{1} v{2}]", device.Model, device.SystemName, device.SystemVersion);
 			Writer.WriteLine ("[Device Date/Time:\t{0}]", now); // to match earlier C.WL output
@@ -147,7 +159,5 @@ namespace Android.NUnitLite {
 		static public IDictionary<string,TestResult> Results {
 			get { return results; }
 		}
-		
-		static public bool Initialized;
 	}
 }

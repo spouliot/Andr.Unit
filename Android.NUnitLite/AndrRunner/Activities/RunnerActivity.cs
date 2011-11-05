@@ -17,11 +17,26 @@ namespace Android.NUnitLite.UI {
     public class RunnerActivity : Activity {
 		
 		Section main;
+		
+		public RunnerActivity ()
+		{
+			Initialized = (AndroidRunner.AssemblyLevel.Count > 0);
+		}
+		
+		public bool Initialized {
+			get; private set;
+		}
+		
+		public AndroidRunner Runner {
+			get { return AndroidRunner.Runner; }
+		}
 
         protected override void OnCreate (Bundle bundle)
         {
             base.OnCreate (bundle);
-			AndroidRunner.Initialized = true;
+			
+			if (Runner.Options == null)
+				Runner.Options = new Options (this);
 			
 			var menu = new RootElement ("Test Runner");
 			
@@ -51,7 +66,7 @@ namespace Android.NUnitLite.UI {
 			
 			// this can be called many times but we only want to load them
 			// once since we need to share them across most activities
-			if (!AndroidRunner.Initialized) {
+			if (!Initialized) {
 				// TestLoader.Load always return a TestSuite so we can avoid casting many times
 				TestSuite ts = TestLoader.Load (assembly) as TestSuite;
 				AndroidRunner.AssemblyLevel.Add (ts);

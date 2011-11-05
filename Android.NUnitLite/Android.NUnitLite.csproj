@@ -281,6 +281,8 @@
     <Compile Include="AndrRunner\Elements\FormattedElement.cs" />
     <Compile Include="AndrRunner\Activities\RunnerActivity.cs" />
     <Compile Include="AndrRunner\AndroidRunner.cs" />
+    <Compile Include="AndrRunner\TcpTextWriter.cs" />
+    <Compile Include="AndrRunner\Options.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="NUnitLite\" />
