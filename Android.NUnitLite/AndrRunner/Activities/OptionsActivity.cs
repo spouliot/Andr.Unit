@@ -2,14 +2,17 @@ using System;
 
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
+using Android.Views;
 using Android.Widget;
 
 using MonoDroid.Dialog;
 
 namespace Android.NUnitLite.UI {
 	
-	[Activity (Label = "Options")]			
+	[Activity (Label = "Options", WindowSoftInputMode = SoftInput.AdjustPan,
+		ConfigurationChanges = ConfigChanges.KeyboardHidden | ConfigChanges.Orientation)]
 	public class OptionsActivity : DialogActivity {
 		BooleanElement remote;
 		EntryElement host_name;
