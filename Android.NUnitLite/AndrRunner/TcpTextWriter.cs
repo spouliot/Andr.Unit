@@ -1,12 +1,10 @@
 // this is an adaptation of NUnitLite's TcpWriter.cs with an additional 
-// overrides and with network-activity UI enhancement
+// overrides
 
 using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
-
-//using MonoTouch.UIKit;
 
 namespace Android.NUnitLite {
 
@@ -25,16 +23,8 @@ namespace Android.NUnitLite {
 			HostName = hostName;
 			Port = port;
 			
-//			UIApplication.SharedApplication.NetworkActivityIndicatorVisible = true;
-
-			try {
-				client = new TcpClient (hostName, port);
-				writer = new StreamWriter (client.GetStream ());
-			}
-			catch {
-//				UIApplication.SharedApplication.NetworkActivityIndicatorVisible = false;
-				throw;
-			}
+			client = new TcpClient (hostName, port);
+			writer = new StreamWriter (client.GetStream ());
 		}
 		
 		public string HostName { get; private set; }
@@ -50,7 +40,6 @@ namespace Android.NUnitLite {
 
 		public override void Close ()
 		{
-//			UIApplication.SharedApplication.NetworkActivityIndicatorVisible = false;
 			writer.Close ();
 		}
 		

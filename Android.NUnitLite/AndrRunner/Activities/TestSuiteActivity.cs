@@ -51,7 +51,7 @@ namespace Android.NUnitLite.UI {
 		public void Run ()
 		{
 			AndroidRunner runner = AndroidRunner.Runner;
-			if (!runner.OpenWriter ("Run " + test_suite))
+			if (!runner.OpenWriter ("Run " + test_suite, this))
 				return;
 			
 			try {

@@ -4,6 +4,8 @@ using System.IO;
 using System.Net.Sockets;
 
 using Android.App;
+using Android.Content;
+using Android.Widget;
 
 using NUnitLite;
 
@@ -34,7 +36,7 @@ namespace Android.NUnitLite {
 		
 		public TextWriter Writer { get; set; }
 		
-		public bool OpenWriter (string message)
+		public bool OpenWriter (string message, Context activity)
 		{
 			DateTime now = DateTime.Now;
 			// let the application provide it's own TextWriter to ease automation with AutoStart property
@@ -45,41 +47,46 @@ namespace Android.NUnitLite {
 						Writer = new TcpTextWriter (Options.HostName, Options.HostPort);
 					}
 					catch (SocketException) {
-						/*
-						UIAlertView alert = new UIAlertView ("Network Error", 
-							String.Format ("Cannot connect to {0}:{1}. Continue on console ?", options.HostName, options.HostPort), 
-							null, "Cancel", "Continue");
-						int button = -1;
-						alert.Clicked += delegate(object sender, UIButtonEventArgs e) {
-							button = e.ButtonIndex;
-						};
-						alert.Show ();
-						while (button == -1)
-							NSRunLoop.Current.RunUntil (NSDate.FromTimeIntervalSinceNow (0.5));
-
-						Console.WriteLine (button);
-						Console.WriteLine ("[Host unreachable: {0}]", button == 0 ? "Execution cancelled" : "Switching to console output");
-						if (button == 0)
-							return false;
-						else*/
-							Writer = Console.Out;
+						string msg = String.Format ("Cannot connect to {0}:{1}. Start network service or disable network option", options.HostName, options.HostPort);
+						Toast.MakeText (activity, msg, ToastLength.Long).Show ();
+						return false;
 					}
 				} else {
 					Writer = Console.Out;
 				}
 			}
-			
+
 			Writer.WriteLine ("[Runner executing:\t{0}]", message);
-#if false
-			Writer.WriteLine ("[Mono for Android Version:\t{0}]", MonoTouch.Constants.Version);
-			UIDevice device = UIDevice.CurrentDevice;
-			Writer.WriteLine ("[{0}:\t{1} v{2}]", device.Model, device.SystemName, device.SystemVersion);
-			Writer.WriteLine ("[Device Date/Time:\t{0}]", now); // to match earlier C.WL output
-			// FIXME: add more data about the device
+			// FIXME
+			Writer.WriteLine ("[M4A Version:\t{0}]", "???");
 			
-			Writer.WriteLine ("[Bundle:\t{0}]", NSBundle.MainBundle.BundleIdentifier);
+			Writer.WriteLine ("[Board:\t\t{0}]", Android.OS.Build.Board);
+			Writer.WriteLine ("[Bootloader:\t{0}]", Android.OS.Build.Bootloader);
+			Writer.WriteLine ("[Brand:\t\t{0}]", Android.OS.Build.Brand);
+			Writer.WriteLine ("[CpuAbi:\t{0} {1}]", Android.OS.Build.CpuAbi, Android.OS.Build.CpuAbi2);
+			Writer.WriteLine ("[Device:\t{0}]", Android.OS.Build.Device);
+			Writer.WriteLine ("[Display:\t{0}]", Android.OS.Build.Display);
+			Writer.WriteLine ("[Fingerprint:\t{0}]", Android.OS.Build.Fingerprint);
+			Writer.WriteLine ("[Hardware:\t{0}]", Android.OS.Build.Hardware);
+			Writer.WriteLine ("[Host:\t\t{0}]", Android.OS.Build.Host);
+			Writer.WriteLine ("[Id:\t\t{0}]", Android.OS.Build.Id);
+			Writer.WriteLine ("[Manufacturer:\t{0}]", Android.OS.Build.Manufacturer);
+			Writer.WriteLine ("[Model:\t\t{0}]", Android.OS.Build.Model);
+			Writer.WriteLine ("[Product:\t{0}]", Android.OS.Build.Product);
+			Writer.WriteLine ("[Radio:\t\t{0}]", Android.OS.Build.Radio);
+			Writer.WriteLine ("[Tags:\t\t{0}]", Android.OS.Build.Tags);
+			Writer.WriteLine ("[Time:\t\t{0}]", Android.OS.Build.Time);
+			Writer.WriteLine ("[Type:\t\t{0}]", Android.OS.Build.Type);
+			Writer.WriteLine ("[User:\t\t{0}]", Android.OS.Build.User);
+			Writer.WriteLine ("[VERSION.Codename:\t{0}]", Android.OS.Build.VERSION.Codename);
+			Writer.WriteLine ("[VERSION.Incremental:\t{0}]", Android.OS.Build.VERSION.Incremental);
+			Writer.WriteLine ("[VERSION.Release:\t{0}]", Android.OS.Build.VERSION.Release);
+			Writer.WriteLine ("[VERSION.Sdk:\t\t{0}]", Android.OS.Build.VERSION.Sdk);
+			Writer.WriteLine ("[VERSION.SdkInt:\t{0}]", Android.OS.Build.VERSION.SdkInt);
+			Writer.WriteLine ("[Device Date/Time:\t{0}]", now); // to match earlier C.WL output
+			
 			// FIXME: add data about how the app was compiled (e.g. ARMvX, LLVM, Linker options)
-#endif
+
 			return true;
 		}
 		

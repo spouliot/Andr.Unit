@@ -42,7 +42,7 @@ namespace Android.NUnitLite.UI {
 					return;
 								
 				AndroidRunner runner = AndroidRunner.Runner;
-				if (!runner.OpenWriter ("Run " + TestCase.FullName))
+				if (!runner.OpenWriter ("Run " + TestCase.FullName, context))
 					return;
 				
 				try {

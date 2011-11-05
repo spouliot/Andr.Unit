@@ -61,6 +61,9 @@ namespace Android.NUnitLite.UI {
 
 			// AutoStart running the tests (with either the supplied 'writer' or the options)
 			if (Runner.AutoStart) {
+				string msg = String.Format ("Automatically running tests{0}...", 
+					Runner.TerminateAfterExecution ? " and closing application" : String.Empty);
+				Toast.MakeText (this, msg, ToastLength.Long).Show ();
 				ThreadPool.QueueUserWorkItem (delegate {
 					RunOnUiThread (delegate {
 						Run ();	
@@ -99,7 +102,7 @@ namespace Android.NUnitLite.UI {
 
 		void Run ()
 		{
-			if (!Runner.OpenWriter ("Run Everything"))
+			if (!Runner.OpenWriter ("Run Everything", this))
 				return;
 			
 			try {
