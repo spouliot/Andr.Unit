@@ -39,10 +39,7 @@ namespace Android.NUnitLite.UI {
 		
 		public override View GetView (Context context, View convertView, ViewGroup parent)
 		{
-			var view = convertView as RelativeLayout;
-			
-			if (view == null)
-				view = new RelativeLayout(context);
+			var view = new RelativeLayout(context);
 						
             var parms = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                                                         ViewGroup.LayoutParams.WrapContent);
